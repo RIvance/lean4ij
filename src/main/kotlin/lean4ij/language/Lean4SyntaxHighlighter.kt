@@ -207,6 +207,19 @@ class Lean4Annotator : Annotator {
                 holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
                     .range(element.textRange).textAttributes(DefaultLanguageHighlighterColors.KEYWORD).create();
             }
+        } else if (
+            element.node.elementType == TokenType.FOR_ALL ||
+            element.node.elementType == TokenType.KEYWORD_COMMAND1 ||
+            element.node.elementType == TokenType.KEYWORD_COMMAND2 ||
+            element.node.elementType == TokenType.KEYWORD_COMMAND3 ||
+            element.node.elementType == TokenType.KEYWORD_COMMAND4 ||
+            element.node.elementType == TokenType.KEYWORD_COMMAND5 ||
+            element.node.elementType == TokenType.KEYWORD_COMMAND6 ||
+            element.node.elementType == TokenType.KEYWORD_MODIFIER ||
+            element.node.elementType == TokenType.KEYWORD_COMMAND_PREFIX
+        ) {
+            holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
+                .range(element.textRange).textAttributes(DefaultLanguageHighlighterColors.KEYWORD).create();
         } else if (element.node.elementType == TokenType.IDENTIFIER) {
             if (isField(element)) {
                 if (!lean4Settings.enableHeuristicField) return
