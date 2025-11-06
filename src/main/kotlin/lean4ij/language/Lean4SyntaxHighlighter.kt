@@ -28,25 +28,46 @@ import java.nio.charset.StandardCharsets
  * TODO use customized textAttributes
  */
 class Lean4SyntaxHighlighter : SyntaxHighlighterBase() {
-    val SEPARATOR: TextAttributesKey = createTextAttributesKey("LEAN_SEPARATOR", DefaultLanguageHighlighterColors.OPERATION_SIGN)
-    val KEY: TextAttributesKey = createTextAttributesKey("LEAN_KEY", DefaultLanguageHighlighterColors.KEYWORD)
-    val VALUE: TextAttributesKey = createTextAttributesKey("LEAN_VALUE", DefaultLanguageHighlighterColors.STRING)
-    val COMMENT: TextAttributesKey = createTextAttributesKey("LEAN_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT)
-    val NUMBER: TextAttributesKey = createTextAttributesKey("LEAN_NUMBER", DefaultLanguageHighlighterColors.NUMBER)
-    val SORRY : TextAttributesKey = createTextAttributesKey("LEAN_SORRY", DefaultLanguageHighlighterColors.INVALID_STRING_ESCAPE)
-    val KEYWORD_IN_PROOF : TextAttributesKey = createTextAttributesKey("LEAN_KEYWORD_IN_PROOF", DefaultLanguageHighlighterColors.KEYWORD)
-    val OTHER: TextAttributesKey = createTextAttributesKey("LEAN_OTHER", DefaultLanguageHighlighterColors.IDENTIFIER)
+    // Text Attributes
+    val KEYWORD_ATTR: TextAttributesKey = createTextAttributesKey("LEAN_KEYWORD", DefaultLanguageHighlighterColors.KEYWORD)
+    val KEYWORD_MODIFIER_ATTR: TextAttributesKey = createTextAttributesKey("LEAN_KEYWORD_MODIFIER", DefaultLanguageHighlighterColors.KEYWORD)
+    val KEYWORD_IN_PROOF_ATTR: TextAttributesKey = createTextAttributesKey("LEAN_KEYWORD_IN_PROOF", DefaultLanguageHighlighterColors.KEYWORD)
+    val COMMENT_ATTR: TextAttributesKey = createTextAttributesKey("LEAN_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT)
+    val BLOCK_COMMENT_ATTR: TextAttributesKey = createTextAttributesKey("LEAN_BLOCK_COMMENT", DefaultLanguageHighlighterColors.BLOCK_COMMENT)
+    val DOC_COMMENT_ATTR: TextAttributesKey = createTextAttributesKey("LEAN_DOC_COMMENT", DefaultLanguageHighlighterColors.DOC_COMMENT)
+    val STRING_ATTR: TextAttributesKey = createTextAttributesKey("LEAN_STRING", DefaultLanguageHighlighterColors.STRING)
+    val NUMBER_ATTR: TextAttributesKey = createTextAttributesKey("LEAN_NUMBER", DefaultLanguageHighlighterColors.NUMBER)
+    val IDENTIFIER_ATTR: TextAttributesKey = createTextAttributesKey("LEAN_IDENTIFIER", DefaultLanguageHighlighterColors.IDENTIFIER)
+    val OPERATOR_ATTR: TextAttributesKey = createTextAttributesKey("LEAN_OPERATOR", DefaultLanguageHighlighterColors.OPERATION_SIGN)
+    val PARENTHESES_ATTR: TextAttributesKey = createTextAttributesKey("LEAN_PARENTHESES", DefaultLanguageHighlighterColors.PARENTHESES)
+    val BRACKETS_ATTR: TextAttributesKey = createTextAttributesKey("LEAN_BRACKETS", DefaultLanguageHighlighterColors.BRACKETS)
+    val BRACES_ATTR: TextAttributesKey = createTextAttributesKey("LEAN_BRACES", DefaultLanguageHighlighterColors.BRACES)
+    val COMMA_ATTR: TextAttributesKey = createTextAttributesKey("LEAN_COMMA", DefaultLanguageHighlighterColors.COMMA)
+    val DOT_ATTR: TextAttributesKey = createTextAttributesKey("LEAN_DOT", DefaultLanguageHighlighterColors.DOT)
+    val SEMICOLON_ATTR: TextAttributesKey = createTextAttributesKey("LEAN_SEMICOLON", DefaultLanguageHighlighterColors.SEMICOLON)
+    val SORRY_ATTR: TextAttributesKey = createTextAttributesKey("LEAN_SORRY", DefaultLanguageHighlighterColors.INVALID_STRING_ESCAPE)
+    val TYPE_ATTR: TextAttributesKey = createTextAttributesKey("LEAN_TYPE", DefaultLanguageHighlighterColors.CLASS_NAME)
 
+    // Key Arrays
     val BAD_CHAR_KEYS: Array<TextAttributesKey> = arrayOf(BAD_CHARACTER)
-    val SEPARATOR_KEYS: Array<TextAttributesKey> = arrayOf(SEPARATOR)
-    val KEY_KEYS: Array<TextAttributesKey> = arrayOf(KEY)
-    val VALUE_KEYS: Array<TextAttributesKey> = arrayOf(VALUE)
-    val COMMENT_KEYS: Array<TextAttributesKey> = arrayOf(COMMENT)
-    val NUMBER_KEYS: Array<TextAttributesKey> = arrayOf(NUMBER)
-    val EMPTY_KEYS: Array<TextAttributesKey> = arrayOf()
-    val OTHER_KEYS: Array<TextAttributesKey> = arrayOf(OTHER)
-    val SORRY_KEYS: Array<TextAttributesKey> = arrayOf(SORRY)
-    val KEYWORD_IN_PROOF_KEYS: Array<TextAttributesKey> = arrayOf(KEYWORD_IN_PROOF)
+    val KEYWORD_KEYS: Array<TextAttributesKey> = arrayOf(KEYWORD_ATTR)
+    val KEYWORD_MODIFIER_KEYS: Array<TextAttributesKey> = arrayOf(KEYWORD_MODIFIER_ATTR)
+    val KEYWORD_IN_PROOF_KEYS: Array<TextAttributesKey> = arrayOf(KEYWORD_IN_PROOF_ATTR)
+    val COMMENT_KEYS: Array<TextAttributesKey> = arrayOf(COMMENT_ATTR)
+    val BLOCK_COMMENT_KEYS: Array<TextAttributesKey> = arrayOf(BLOCK_COMMENT_ATTR)
+    val DOC_COMMENT_KEYS: Array<TextAttributesKey> = arrayOf(DOC_COMMENT_ATTR)
+    val STRING_KEYS: Array<TextAttributesKey> = arrayOf(STRING_ATTR)
+    val NUMBER_KEYS: Array<TextAttributesKey> = arrayOf(NUMBER_ATTR)
+    val IDENTIFIER_KEYS: Array<TextAttributesKey> = arrayOf(IDENTIFIER_ATTR)
+    val OPERATOR_KEYS: Array<TextAttributesKey> = arrayOf(OPERATOR_ATTR)
+    val PARENTHESES_KEYS: Array<TextAttributesKey> = arrayOf(PARENTHESES_ATTR)
+    val BRACKETS_KEYS: Array<TextAttributesKey> = arrayOf(BRACKETS_ATTR)
+    val BRACES_KEYS: Array<TextAttributesKey> = arrayOf(BRACES_ATTR)
+    val COMMA_KEYS: Array<TextAttributesKey> = arrayOf(COMMA_ATTR)
+    val DOT_KEYS: Array<TextAttributesKey> = arrayOf(DOT_ATTR)
+    val SEMICOLON_KEYS: Array<TextAttributesKey> = arrayOf(SEMICOLON_ATTR)
+    val SORRY_KEYS: Array<TextAttributesKey> = arrayOf(SORRY_ATTR)
+    val TYPE_KEYS: Array<TextAttributesKey> = arrayOf(TYPE_ATTR)
 
 
     override fun getHighlightingLexer(): Lexer {
@@ -57,30 +78,84 @@ class Lean4SyntaxHighlighter : SyntaxHighlighterBase() {
         if (tokenType == null) {
             return emptyArray()
         }
-        if (tokenType == TokenType.KEYWORD_COMMAND1 ||
-            tokenType == TokenType.KEYWORD_COMMAND2 ||
-            tokenType == TokenType.KEYWORD_COMMAND3 ||
-            tokenType == TokenType.KEYWORD_COMMAND4 ||
-            tokenType == TokenType.KEYWORD_COMMAND5 ||
-            tokenType == TokenType.KEYWORD_MODIFIER ||
-            tokenType == TokenType.DEFAULT_TYPE ||
-            tokenType == TokenType.KEYWORD_COMMAND_PREFIX
-            ) {
-            return KEY_KEYS;
+        
+        return when (tokenType) {
+            // Keywords
+            TokenType.KEYWORD_COMMAND1,
+            TokenType.KEYWORD_COMMAND2,
+            TokenType.KEYWORD_COMMAND3,
+            TokenType.KEYWORD_COMMAND4,
+            TokenType.KEYWORD_COMMAND5,
+            TokenType.KEYWORD_COMMAND_PREFIX -> KEYWORD_KEYS
+            
+            TokenType.KEYWORD_MODIFIER -> KEYWORD_MODIFIER_KEYS
+            TokenType.KEYWORD_COMMAND6 -> KEYWORD_IN_PROOF_KEYS
+            TokenType.KEYWORD_SORRY -> SORRY_KEYS
+            
+            // Types
+            TokenType.DEFAULT_TYPE -> TYPE_KEYS
+            
+            // Comments
+            TokenType.LINE_COMMENT -> COMMENT_KEYS
+            TokenType.BLOCK_COMMENT -> BLOCK_COMMENT_KEYS
+            TokenType.DOC_COMMENT -> DOC_COMMENT_KEYS
+            
+            // Strings
+            TokenType.STRING -> STRING_KEYS
+            
+            // Numbers
+            TokenType.NUMBER,
+            TokenType.NEGATIVE_NUMBER -> NUMBER_KEYS
+            
+            // Identifiers
+            TokenType.IDENTIFIER -> IDENTIFIER_KEYS
+            
+            // Operators and Symbols
+            TokenType.ASSIGN,
+            TokenType.EQUAL,
+            TokenType.COLON,
+            TokenType.AT,
+            TokenType.STAR,
+            TokenType.FOR_ALL,
+            TokenType.MISC_COMPARISON_SYM,
+            TokenType.MISC_PLUS_SYM,
+            TokenType.MISC_MULTIPLY_SYM,
+            TokenType.MISC_EXPONENT_SYM,
+            TokenType.MISC_ARROW_SYM -> OPERATOR_KEYS
+            
+            // Parentheses
+            TokenType.LEFT_PAREN,
+            TokenType.RIGHT_PAREN -> PARENTHESES_KEYS
+            
+            // Brackets
+            TokenType.LEFT_BRACKET,
+            TokenType.RIGHT_BRACKET,
+            TokenType.LEFT_UNI_BRACKET,
+            TokenType.RIGHT_UNI_BRACKET -> BRACKETS_KEYS
+            
+            // Braces
+            TokenType.LEFT_BRACE,
+            TokenType.RIGHT_BRACE -> BRACES_KEYS
+            
+            // Punctuation
+            TokenType.COMMA -> COMMA_KEYS
+            TokenType.DOT -> DOT_KEYS
+            
+            // Attributes
+            TokenType.ATTRIBUTE_START,
+            TokenType.ATTRIBUTE -> KEYWORD_KEYS
+            
+            // Placeholder
+            TokenType.PLACEHOLDER -> IDENTIFIER_KEYS
+            
+            // Template
+            TokenType.TEMPLATE_TRIGGER -> KEYWORD_KEYS
+            
+            // Other
+            TokenType.OTHER -> IDENTIFIER_KEYS
+            
+            else -> emptyArray()
         }
-        if (tokenType == TokenType.KEYWORD_COMMAND6) {
-            return KEYWORD_IN_PROOF_KEYS
-        }
-        if (tokenType == TokenType.LINE_COMMENT || tokenType == TokenType.BLOCK_COMMENT || tokenType == TokenType.DOC_COMMENT) {
-            return COMMENT_KEYS;
-        }
-        if (tokenType == TokenType.NUMBER||tokenType==TokenType.NEGATIVE_NUMBER) {
-            return NUMBER_KEYS;
-        }
-        if (tokenType == TokenType.KEYWORD_SORRY) {
-            return SORRY_KEYS;
-        }
-        return OTHER_KEYS;
     }
 }
 
