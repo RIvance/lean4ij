@@ -22,6 +22,7 @@ class Lean4Settings : PersistentStateComponent<Lean4Settings> {
     var useSpaceAfterLineComment = true
     var enableHeuristicTactic = true
     var enableHeuristicField = true
+    var enableHeuristicType = true
     var enableHeuristicAttributes = true
     var enableHeuristicDefinition = true
     var enableSemanticHighlighting = true
@@ -94,6 +95,7 @@ fun Lean4SettingsView.createComponent(settings: Lean4Settings) = panel {
         boolean("Enable heuristic definition highlighting", settings::enableHeuristicDefinition)
         boolean("Enable heuristic tactic highlighting", settings::enableHeuristicTactic)
         boolean("Enable heuristic field highlighting", settings::enableHeuristicField)
+        boolean("Enable heuristic type highlighting (uppercase identifiers)", settings::enableHeuristicType)
         boolean("Enable heuristic attributes highlighting", settings::enableHeuristicAttributes)
         boolean("Comment at first column", settings::commentAtFirstColumn)
         boolean("Use space after line comment", settings::useSpaceAfterLineComment)

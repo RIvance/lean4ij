@@ -212,6 +212,10 @@ class Lean4Annotator : Annotator {
                 if (!lean4Settings.enableHeuristicField) return
                 holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
                     .range(element.textRange).textAttributes(DefaultLanguageHighlighterColors.INSTANCE_FIELD).create();
+            } else if (startsWithUppercase(element.text)) {
+                if (!lean4Settings.enableHeuristicType) return
+                holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
+                    .range(element.textRange).textAttributes(DefaultLanguageHighlighterColors.CLASS_NAME).create();
             } else {
                 if (!lean4Settings.enableHeuristicTactic) return
                 if (tactics.containsKey(element.text)) {
@@ -220,6 +224,17 @@ class Lean4Annotator : Annotator {
                 }
             }
         }
+    }
+
+    private fun startsWithUppercase(text: String): Boolean {
+        if (text.isEmpty()) return false
+        val firstChar = text.first()
+        // Check for uppercase English letters (A-Z)
+        if (firstChar in 'A'..'Z') return true
+        // Check for uppercase Greek letters
+        // Greek uppercase: Α-Ω (U+0391 to U+03A9)
+        if (firstChar in '\u0391'..'\u03A9') return true
+        return false
     }
 
     private fun isField(element: PsiElement): Boolean {
