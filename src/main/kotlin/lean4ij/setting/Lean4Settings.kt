@@ -24,6 +24,7 @@ class Lean4Settings : PersistentStateComponent<Lean4Settings> {
     var enableHeuristicField = true
     var enableHeuristicAttributes = true
     var enableHeuristicDefinition = true
+    var enableSemanticHighlighting = true
     var enableHoverHighlight = true
 
     var addSpaceAfterLiveTemplates = true
@@ -89,6 +90,7 @@ fun Lean4SettingsView.createComponent(settings: Lean4Settings) = panel {
     group("General Settings") {
         boolean("Enable the vertical file progress bar on the left of editor", settings::enableFileProgressBar)
         boolean("Enable hover highlight for current term", settings::enableHoverHighlight)
+        boolean("Enable LSP semantic highlighting", settings::enableSemanticHighlighting)
         boolean("Enable heuristic definition highlighting", settings::enableHeuristicDefinition)
         boolean("Enable heuristic tactic highlighting", settings::enableHeuristicTactic)
         boolean("Enable heuristic field highlighting", settings::enableHeuristicField)

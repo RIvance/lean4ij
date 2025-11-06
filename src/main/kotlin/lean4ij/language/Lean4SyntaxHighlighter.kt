@@ -35,6 +35,7 @@ class Lean4SyntaxHighlighter : SyntaxHighlighterBase() {
     val NUMBER: TextAttributesKey = createTextAttributesKey("LEAN_NUMBER", DefaultLanguageHighlighterColors.NUMBER)
     val SORRY : TextAttributesKey = createTextAttributesKey("LEAN_SORRY", DefaultLanguageHighlighterColors.INVALID_STRING_ESCAPE)
     val KEYWORD_IN_PROOF : TextAttributesKey = createTextAttributesKey("LEAN_KEYWORD_IN_PROOF", DefaultLanguageHighlighterColors.KEYWORD)
+    val OTHER: TextAttributesKey = createTextAttributesKey("LEAN_OTHER", DefaultLanguageHighlighterColors.IDENTIFIER)
 
     val BAD_CHAR_KEYS: Array<TextAttributesKey> = arrayOf(BAD_CHARACTER)
     val SEPARATOR_KEYS: Array<TextAttributesKey> = arrayOf(SEPARATOR)
@@ -43,6 +44,7 @@ class Lean4SyntaxHighlighter : SyntaxHighlighterBase() {
     val COMMENT_KEYS: Array<TextAttributesKey> = arrayOf(COMMENT)
     val NUMBER_KEYS: Array<TextAttributesKey> = arrayOf(NUMBER)
     val EMPTY_KEYS: Array<TextAttributesKey> = arrayOf()
+    val OTHER_KEYS: Array<TextAttributesKey> = arrayOf(OTHER)
     val SORRY_KEYS: Array<TextAttributesKey> = arrayOf(SORRY)
     val KEYWORD_IN_PROOF_KEYS: Array<TextAttributesKey> = arrayOf(KEYWORD_IN_PROOF)
 
@@ -78,7 +80,7 @@ class Lean4SyntaxHighlighter : SyntaxHighlighterBase() {
         if (tokenType == TokenType.KEYWORD_SORRY) {
             return SORRY_KEYS;
         }
-        return EMPTY_KEYS;
+        return OTHER_KEYS;
     }
 }
 

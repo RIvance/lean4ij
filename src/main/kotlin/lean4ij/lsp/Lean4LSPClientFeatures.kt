@@ -7,7 +7,6 @@ import com.intellij.psi.PsiFile
 import com.redhat.devtools.lsp4ij.client.features.LSPClientFeatures
 import com.redhat.devtools.lsp4ij.client.features.LSPDiagnosticFeature
 import com.redhat.devtools.lsp4ij.client.features.LSPWorkspaceSymbolFeature
-import lean4ij.project.LeanProjectService
 import lean4ij.setting.Lean4Settings
 import org.eclipse.lsp4j.InitializeParams
 
@@ -32,6 +31,8 @@ class Lean4LSPClientFeatures : LSPClientFeatures() {
                 return false
             }
         }
+        // Enable semantic tokens for accurate, compiler-based highlighting
+        semanticTokensFeature = LeanSemanticTokensFeature()
     }
 
     override fun isEnabled(file: VirtualFile): Boolean {
